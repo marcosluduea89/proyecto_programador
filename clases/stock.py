@@ -9,15 +9,19 @@ Version: 1.1
 
 __author__ = "Marcos Ludueña "
 __email__ = "marcosluduea89@gmail.com  "
-__version__ = "1.0"
+__version__ = "1.1"
 
+import sqlalchemy
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import query, sessionmaker, relationship
+from sqlalchemy import func
 
-from _typeshed import IdentityFunction
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class Stock(db.Model):
-    __tablename__ = "Stock"
+    __tablename__ = "stock"
     id_stock = db.Column(db.Integer, primary_key=True)
     nombre_producto = db.Column(db.String)
     cantidad = db.Column(db.Integer)

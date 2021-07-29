@@ -9,14 +9,19 @@ Version: 1.1
 
 __author__ = "Marcos Ludueña "
 __email__ = "marcosluduea89@gmail.com  "
-__version__ = "1.0"
+__version__ = "1.1"
 
+import sqlalchemy
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import query, sessionmaker, relationship
+from sqlalchemy import func
 
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class Producto(db.Model):
-    __tablename__ = "Producto"
+    __tablename__ = "producto"
     id_producto = db.Column(db.Integer, primary_key=True)
     nombre_producto = db.Column(db.String)
     dimension = db.Column(db.String)

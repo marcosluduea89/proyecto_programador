@@ -9,17 +9,17 @@ Version: 1.1
 
 __author__ = "Marcos Ludueña "
 __email__ = "marcosluduea89@gmail.com  "
-__version__ = "1.0"
+__version__ = "1.1"
 
 
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class Usuario(db.Model):
-    __tablename__ = "Usuario"
+    __tablename__ = "usuario"
     id_usuario = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String)
-    apellido = db.Colum(db.String)
+    apellido = db.Column(db.String)
     
     def __repr__(self):
         return f"Usuario con id: {self.id_usuario},  {self.nombre},{self.apellido}"

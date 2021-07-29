@@ -40,9 +40,14 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.image as mpimg
 
-import cliente,operacion,producto,stock,usuario
+from clases import cliente 
+from clases import operacion
+from clases import producto
+from clases import stock 
+from clases import usuario
 
 from config import config
+
 
 # Crear el server Flask
 app = Flask(__name__)
@@ -61,7 +66,12 @@ server_config = config('server', config_path_name)
 # Indicamos al sistema (app) de donde leer la base de datos
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_config['database']}"
 # Asociamos nuestro controlador de la base de datos con la aplicacion
-heart.db.init_app(app)
+cliente.db.init_app(app)
+operacion.db.init_app(app)
+producto.db.init_app(app)
+stock.db.init_app(app)
+usuario.db.init_app(app)
+
 
 # Ruta que se ingresa por la ULR 127.0.0.1:5000
 @app.route("/")
@@ -70,10 +80,14 @@ def index():
         
         if os.path.isfile(db_config['database']) == False:
             # Sino existe la base de datos la creo
-            heart.create_schema()
-        
+            usuario.create_schema()
+            operacion.create_schema()
+            producto.create_schema()
+            stock.create_schema()
+            usuario.create_schema()
+
         # En el futuro se podria realizar una página de bienvenida
-        return redirect(url_for('pulsaciones'))
+        return "<h1>prueba!!</h1>"
     except:
         return jsonify({'trace': traceback.format_exc()})
 
@@ -82,18 +96,7 @@ def index():
 def api():
     try:
         # Imprimir los distintos endopoints disponibles
-        result = "<h1>Bienvenido!!</h1>"
-        result += "<h2>Endpoints disponibles:</h2>"
-        result += "<h3>[GET] /reset --> borrar y crear la base de datos</h3>"
-        result += "<h3>[GET] /pulsaciones?limit=[]&offset=[] --> mostrar últimas pulsaciones registradas (limite and offset are optional)</h3>"
-        result += "<h3>[GET] /pulsaciones/tabla?limit=[]&offset=[] --> mostrar últimas pulsaciones registradas (limite and offset are optional)</h3>"
-        result += "<h3>[GET] /pulsaciones/{name}/historico --> mostrar el histórico de pulsaciones de una persona</h3>"
-        result += "<h3>[GET] /registro --> HTML con el formulario de registro de pulsaciones</h3>"
-        result += "<h3>[POST] /registro --> ingresar nuevo registro de pulsaciones por JSON</h3>"
-        result += "<h3>[GET] /login --> HTML con el formulario de ingreso de usuario</h3>"
-        result += "<h3>[POST] /login --> ingresar el nombre de usuario por JSON</h3>"
-        result += "<h3>[GET] /logout --> Terminar la sesion</h3>"
-        result += "<h3>[GET] /user --> Paginade bienvenida del usuario</h3>"
+        result = "<h1>Bienvenido, aqui mostrare los endpoints!!</h1>"
 
         return(result)
     except:
@@ -104,138 +107,23 @@ def api():
 def reset():
     try:
         # Borrar y crear la base de datos
-        heart.create_schema()
+        if os.path.isfile(db_config['database']) == True:
+        
+            usuario.create_schema()
+            operacion.create_schema()
+            producto.create_schema()
+            stock.create_schema()
+            usuario.create_schema()
+
         result = "<h3>Base de datos re-generada!</h3>"
         return (result)
     except:
         return jsonify({'trace': traceback.format_exc()})
 
 
-@app.route("/pulsaciones")
-def pulsaciones():
-    try:
-        #data = show(show_type='table')
-        # Obtener de la query string los valores de limit y offset
-        limit_str = str(request.args.get('limit'))
-        offset_str = str(request.args.get('offset'))
-
-        limit = 0
-        offset = 0
-
-        if(limit_str is not None) and (limit_str.isdigit()):
-            limit = int(limit_str)
-
-        if(offset_str is not None) and (offset_str.isdigit()):
-            offset = int(offset_str)
-
-        # Obtener el reporte
-        data = heart.report(limit=limit, offset=offset)
-
-        return render_template('tabla.html', data=data)
-    except:
-        return jsonify({'trace': traceback.format_exc()})
-
-
-@app.route("/pulsaciones/<name>/historico")
-def pulsaciones_historico(name):
-    try:
-        # Obtener el historial de la persona
-        time, heartrate = heart.chart(name)
-
-        # Crear el grafico que se desea mostrar
-        fig, ax = plt.subplots(figsize=(16, 9))
-        ax.plot(time, heartrate)
-        ax.get_xaxis().set_visible(False)
-
-        output = plot_to_canvas(fig)
-        plt.close(fig)  # Cerramos la imagen para que no consuma memoria del sistema
-        return Response(output.getvalue(), mimetype='image/png')
-    except:
-        return jsonify({'trace': traceback.format_exc()})
-
-
-@app.route("/registro", methods=['GET', 'POST'])
-def registro():
-    if request.method == 'GET':
-        # Si entré por "GET" es porque acabo de cargar la página
-        try:
-            return render_template('registro.html')
-        except:
-            return jsonify({'trace': traceback.format_exc()})
-
-    if request.method == 'POST':
-        try:
-            # Obtener del HTTP POST JSON los pulsos
-            nombre = str(request.form.get('name'))
-            pulsos = str(request.form.get('heartrate'))
-
-            if(nombre is None or pulsos is None or pulsos.isdigit() is False):
-                # Datos ingresados incorrectos
-                    return Response(status=400)
-            time = datetime.now()
-            heart.insert(time, nombre, int(pulsos))
-
-            # Como respuesta al POST devolvemos la tabla de valores
-            return redirect(url_for('pulsaciones'))
-        except:
-            return jsonify({'trace': traceback.format_exc()})
-
-
-@app.route("/login", methods=['GET', 'POST'])
-def login():
-    if request.method == 'GET':
-        # Si entré por "GET" es porque acabo de cargar la página
-        try:
-            return render_template('login.html')
-        except:
-            return jsonify({'trace': traceback.format_exc()})
-
-    if request.method == 'POST':
-        # Obtener del HTTP POST JSON el nombre
-        nombre = str(request.form.get('name'))
-
-        if(nombre is None):
-            # Datos ingresados incorrectos
-            return Response(status=400)
-
-        session['user'] = nombre
-        return redirect(url_for('user'))
-
-
-@app.route("/logout")
-def logout():
-    try:
-        # Borrar y cerrar la sesion
-        session.clear()
-        return redirect(url_for('login'))
-    except:
-        return jsonify({'trace': traceback.format_exc()})
-
-
-@app.route("/user")
-def user():
-    try:
-        # De esta forma verifico si se ha registro el nombre del usuario
-        # en la sesion, en caso negativo se solicita el login
-        if 'user' in session:
-            nombre = session['user']
-            return render_template('user.html', name=nombre)
-        else:
-            return redirect(url_for('login'))
-    except:
-        return jsonify({'trace': traceback.format_exc()})
-
-
-def plot_to_canvas(fig):
-    # Convertir ese grafico en una imagen para enviar por HTTP
-    # y mostrar en el HTML
-    output = io.BytesIO()
-    FigureCanvas(fig).print_png(output)
-    return output
-
 
 if __name__ == '__main__':
-    print('Inove server start!')
+    print('Software fenix server start!')
 
     app.run(host=server_config['host'],
             port=server_config['port'],
