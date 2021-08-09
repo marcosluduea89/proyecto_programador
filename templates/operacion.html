@@ -1,0 +1,52 @@
+<html>
+<head>
+<title>Registro Cliente</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/operacion_style.css') }}">
+
+</head>
+ 
+<body>
+<h3>OPERACION DE VENTA</h3>
+</div>
+
+<div class="topnav">
+  <a href="{{url_for('api')}}">Inicio</a>
+
+  </div><br>
+
+<div class="contenedor" id="container">
+  <header>
+
+<table align="center" cellpadding = "10">
+<!----- DNI ---------------------------------------------------------->
+<section class="main">
+  <div class="form">
+    
+
+      <!-- Formulario para recibir los parámetros  -->
+      <form method = "POST" action="{{url_for('operacion')}}">
+        <tr>
+        <td> canasto ropa</td>
+        <td><input type="text" name="canasto_ropa" placeholder=""  />
+        <tr>
+        <td> canasto matero</td>
+        <td><input type="text" name="canasto_matero" placeholder=""  />
+        <tr>
+        <td> bandejas exhibidoras</td>
+        <td><input type="text" name="bandejas_exhibidoras" placeholder=""/>
+        <tr>
+        <td> bandejas pintadas</td>
+        <td><input type="text" name="bandejas_pintadas" placeholder="" />
+        <tr>
+        <td> anillos</td>
+        <td><input type="text" name="anillos" placeholder=""  />
+        <tr>
+        <td> paneritas base de mimbre</td>
+        <td><input type="text" name="paneritas_mimbre" placeholder=""  />
+        <tr>
+        <td> paneritas base de madera</td>
+        <td><input type="text" name="paneritas_madera" placeholder=""  />
+        <tr>     
+        <td><button type="submit" class="btn btn-primary btn-block btn-large">comprar</button>
+      </form>
+

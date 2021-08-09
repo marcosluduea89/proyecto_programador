@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>Registro Cliente</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/operacion_style.css') }}">
+
+</head>
+ 
+<body>
+<h3>REGISTRO NUEVO CLIENTE</h3>
+</div>
+
+<div class="topnav">
+  <a href="{{url_for('api')}}">Inicio</a>
+
+  </div><br>
+
+<div class="contenedor" id="container">
+  <header>
+
+<table align="center" cellpadding = "10">
+<!----- DNI ---------------------------------------------------------->
+<section class="main">
+  <div class="form">
+    
+
+      <!-- Formulario para recibir los parámetros  -->
+      <form method = "POST" action="{{url_for('registrocliente')}}">
+        <tr>
+        <td> DNI</td>
+        <td><input type="text" name="dni" placeholder="" required="required" />
+        <tr>
+        <td> NOMBRE</td>
+        <td><input type="text" name="nombre" placeholder="" required="required" />
+        <tr>
+        <td> APELLIDO</td>
+        <td><input type="text" name="apellido" placeholder="" required="required" />
+        <tr>
+        <td> TELEFONO</td>
+        <td><input type="text" name="telefono" placeholder="" required="required" />
+        <tr>
+        <td> DIRECCION</td>
+        <td><input type="text" name="direccion" placeholder="">
+        <tr>  
+        <td><button type="submit" class="btn btn-primary btn-block btn-large">Registrar</button>
+      </form>
+
