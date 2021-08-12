@@ -27,15 +27,21 @@ import models
 
 # Funcion para verificar el cliente segun su id (DNI)
 def verificacion_cliente (dni):
-    query = db.session.query(Cliente).filter(Cliente.dni==dni)
-    validador = query.first()
+    try:
+        query = db.session.query(Cliente).filter(Cliente.dni==dni)
+        validador = query.first()
+        if validador is not None:
+            return True
+    except:
+        return False
+def buscador_cliente(dni):
+        query = db.session.query(Cliente).filter(Cliente.dni==dni)
+        validador = query.first()
+        nombre = validador.nombre
+        return nombre
 
-    if validador is None:
-        return []
-        
-    return validador
-
-    pass
+    
+    
 def agregar_cliente ():
 
     

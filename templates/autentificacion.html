@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>Autentificacion de cliente</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/operacion_style.css') }}">
+<ul>
+    
+  <li><a href="{{url_for('index')}}">Home</a></li>
+  <li><a href="{{url_for('registrocliente')}}">Registrar Nuevo Cliente</a></li>
+  <li><a href="#c3">Informacion de Clientes registrados</a></li>
+  <li><a href="#d4">Informacion de Contacto</a></li>
+</ul>
+</head>
+ 
+<body>
+<h3>AUTENTIFICACION DE CLIENTE</h3>
+</div>
+
+  </div><br>
+
+
+ 
+
+<table align="center" cellpadding = "10">
+<!----- DNI ---------------------------------------------------------->
+<section class="main">
+  <div class="form">
+    
+
+      <!-- Formulario para recibir los parámetros  -->
+      <form method = "POST" action="{{url_for('venta')}}">
+        <h3><h2>Ingrese DNI del cliente para consultar si se encuentra en la 
+          base de datos : <h3></h3>
+        <tr>
+        <td> DNI</td>
+        <td><input type="number" name="dni" placeholder="" required="required" />
+        <tr>
+        <td><button type="submit" class="btn btn-primary btn-block btn-large">Ingresar</button>
+      </form>
+        <a class="btn btn-primary btn-block btn-large" href="{{url_for('registrocliente')}}"></a>
+  </div>
+

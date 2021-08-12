@@ -1,0 +1,184 @@
+/*Entire Page is IN PROGRESS*/
+@import url(https://fonts.googleapis.com/css?family=Arima+Madurai:800);
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:600);
+@import url(https://allfont.net/allfont.css?fonts=colonna-mt);
+@import url(https://fonts.googleapis.com/css?family=Didact+Gothic);
+body {
+
+  background: url(https://www.canal13sanjuan.com/u/fotografias/fotosnoticias/2018/4/27/96846.jpg) no-repeat center center fixed;
+  background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  -o-background-size: cover;
+  /* background-image: url(http://wallpapercave.com/wp/p38Ujl2.jpg);
+  background-repeat: repeat;  */
+}
+
+body {
+  margin-bottom: 50px;
+}
+
+
+.title {
+  font-size: 85px;
+  font-family: "Colonna Mt";
+  text-align: center;
+  text-decoration: underline;
+  color: #ffffff;
+  /* color: #67293e; */
+  
+}
+
+.for {
+  font-family: "arima madurai";
+  text-align: center;
+  font-size: 35px;
+  color: #203737
+}
+.code-name {
+  font-size: 55px;
+  font-family: "arima madurai";
+  text-align: center;
+  color: #203737;
+  margin-bottom: 50px;
+}
+
+.flourish1 {
+  display:block;
+  margin: auto;
+  width: 800px;
+}
+
+ul {
+  list-style-type: none;
+  margin-top: 15px;
+  margin-left: 10px;
+  padding: 0;
+  width: 225px;
+  background-color: #cd9f96;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+  background: rgba(205, 159, 150,0.7);
+  font-size: 25px
+}
+
+li a {
+  display: block;
+  color: #000;
+  padding: 15px 16px;
+}
+
+li a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+li a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+.hd {
+  font-family: "Colonna MT";
+  font-size: 65px;
+  text-align: center
+}
+
+.h2 {
+  font-family: "Colonna MT";
+  font-size: 65px;
+  text-align: center;
+  text-decoration: underline;
+  color: #000000;
+  /* color: #67293e; */
+}
+.h2c {
+  font-family: "Colonna MT";
+  font-size: 65px;
+  text-align: center;
+  text-decoration: underline;
+  margin-top: 40px;
+  color: #67293e;
+}
+
+.Laura {
+  text-style: bold;
+  font-family: "Didact Gothic";
+  font-size: 20px;
+  color: #000
+}
+
+.about {
+  text-style: bold;
+  font-family: "Didact Gothic";
+  font-size: 40px;
+  color: #203737;
+  line-height: 50px;
+  text-align: center;
+ 
+}
+
+.tp {
+  font-size: 15px;
+  font-family: "Didact Gothic";
+  color: #000;
+}
+
+/*contact form*/
+
+
+form div + div {
+  margin-top: 1em
+}
+
+label {
+  /* To make sure that all labels have the same size and are properly aligned */
+  display: inline-block;
+  width: 85px;
+  text-align: left;
+}
+
+input,
+text area {
+  font: 30px "didact-gothic";
+  /* To give the same size to all text field */
+  width: 400px;
+  height: 40px
+}
+
+input:focus,
+textarea:focus {
+  /* To give a little highlight on active elements */
+  border-color: #cd9f96;
+}
+
+textarea {
+  /* To properly align multiline text fields with their labels */
+  vertical-align: top;
+  /* To give enough room to type some text */
+  height: 100px;
+  width: 400px;
+  /* To allow users to resize any textarea vertically
+       It does not work on all browsers */
+  resize: vertical;
+  font: 20px "didact-gothic"
+}
+
+.button {
+  font-family: "Colonna mt"
+}
+
+.fyi {
+  font-family: "didact-gothic";
+}
+
+
+.last-flourish {
+    position: absolute;
+    bottom: 8px;
+    right: 16px;
+    top: 1925px;
+  width: 375px
+
+}

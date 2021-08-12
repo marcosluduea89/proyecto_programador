@@ -11,7 +11,9 @@ __author__ = "Marcos Ludueña "
 __email__ = "marcosluduea89@gmail.com  "
 __version__ = "1.1"
 
+
 from datetime import datetime
+from flask.json import jsonify
 import sqlalchemy
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.ext.declarative import declarative_base
@@ -73,7 +75,7 @@ class Producto(db.Model):
 class Stock(db.Model):
     __tablename__ = "stock"
     id= db.Column(db.Integer, primary_key=True)
-    id_producto = db.Column(db.String, ForeignKey("producto.id"))
+    id_producto = db.Column(db.Integer, ForeignKey("producto.id"))
     cantidad = db.Column(db.Integer)
     proveedor = db.Column(db.String)
     
@@ -113,6 +115,8 @@ def insert_operacion(nombre, cantidad,id_usuario,precio_final):
     numeroid = buscar_id_producto(nombre)
     id_producto = numeroid
 
+    #creamos el objeto nueva_operacion y su relacion con los id's
+
     nueva_operacion = Operacion(fecha=fecha, cantidad=cantidad,precio_final=precio_final)
     nueva_operacion.id_producto= id_producto
     nueva_operacion.id_usuario=id_usuario
@@ -138,13 +142,49 @@ def insert_productos():
         nombre_producto,dimension,precio = row
         insertar (nombre_producto,dimension,int(precio))
         
-def insert_stock(nombre_producto, cantidad, proveedor):
-    # Crear un nuevo registro de stock
-    stock = Stock(nombre_producto=nombre_producto, cantidad= cantidad,proveedor=proveedor)
+def insert_stock():
+    def insertar (id_producto,cantidad, proveedor):# Crear un nuevo registro de stock
+        stock = Stock(id_producto=id_producto, cantidad= cantidad,proveedor=proveedor)
+        stock.id_producto = id_producto
 
-    # Agregar el registro de stock a la DB
-    db.session.add(stock)
+        # Agregar el registro de stock a la DB
+        db.session.add(stock)
+        db.session.commit()
+        #Los id de productos van desde el 1 al 7
+    stock_productos = [(1 ,50,'Mimbres Mendocinos'),(2 ,10,'mimbre de Buenos Aires'),
+                        (3 ,10,'Mimbres Mendocinos'),(4 ,6,'Mimbre de Buenos Aires'),
+                        (5 ,10,'Mimbres Mendocinos'),(6 ,250,'Mimbres de Buenos Aires'),(7,13,'Mimbres Mendocinos')]
+
+    
+    for row in stock_productos:
+        id_producto, cantidad, proveedor = row
+        insertar (int(id_producto),int(cantidad),proveedor)
+
+def actualizar_stock (nombre,cantidad):
+
+    id_producto= buscar_id_producto(nombre)
+    id_producto= int(id_producto)
+    cantidad = int(cantidad)
+    
+    exist_product = db.session.query(Stock).filter(Stock.id_producto==id_producto).first()
+    exist_product.id = id_producto
+
+
+    # Verificamos si existe stock en el producto. Si hay lo resta a stock, sino no se puede realizar la operacion
+    # if exist_product is None:
+    #     return ("< no hay stock del producto con el id:</h3>" )
+    # else: #  hay que agregarle la condicion que no se puede comprar mas de lo que existe en stock, es decir cantidad > exist_product
+
+    exist_product.cantidad = Stock.cantidad - cantidad
     db.session.commit()
+
+def consultar_stock (nombre):
+    id_producto = buscar_id_producto(nombre)
+    id_producto = int(id_producto)
+    total_stock = db.session.query(Stock).filter(Stock.id_producto==id_producto).first()
+    total_stock = total_stock.cantidad
+
+    return total_stock
 
 def buscar_id_producto(nombre):
     query = db.session.query(Producto).filter(Producto.nombre_producto == nombre)
@@ -154,11 +194,41 @@ def buscar_id_producto(nombre):
     return numeroid
 
 def busqueda():
-    query = db.session.query(Cliente)
+    query = db.session.query(Producto)
     todos = query.all()
-    dni = [x.dni for x in todos]
-    telefono = [x.telefono for x in todos]
+    total_productos = [x.cantidad for x in todos]
+    ultimo_mes = [x.fecha for x in todos]
     
 
-    return dni,telefono
+    return total_productos,ultimo_mes
 
+# def report(limit=0, offset=0):
+
+#     json_result_list = []
+#     query = db.session.query(Operacion).with_entities(Operacion, db.func.count(Operacion.id))
+
+#     # Agrupamos por paciente (name) para que solo devuelva
+#     # un valor por paciente
+#     query = query.group_by(Operacion.id)
+
+#     # Ordenamos por fecha para obtener el ultimo registro
+#     query = query.order_by(Operacion.fecha)
+
+#     if limit > 0:
+#         query = query.limit(limit)
+#         if offset > 0:
+#             query = query.offset(offset)
+
+#     for result in query:
+#         operaciones = result[0]
+        
+#         json_result = {}
+#         json_result['id'] = operaciones.id
+#         json_result['fecha'] = operaciones.fecha.strftime("%Y-%m-%d %H:%M:%S.%f")
+#         json_result['id_producto'] = operaciones.id_producto
+#         json_result['cantidad'] = operaciones.cantidad
+#         json_result['id_usuario'] = operaciones.id_usuario
+#         json_result['precio_final'] = operaciones.precio_final
+#         json_result_list.append(json_result)
+
+#     return json_result_list

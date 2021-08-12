@@ -1,7 +1,18 @@
 <html>
 <head>
 <title>Registro Cliente</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/operacion_style.css') }}">
+<ul>
+    
+  <li><a href="{{url_for('index')}}">Home</a></li>
+  <li><a href="#d4">Consultar Ultimas operaciones</a></li>
+  <li><a href="{{url_for('venta')}}">Realizar operacion con otro cliente</a></li>
+  <li><a href="#d4">Informacion de Cliente</a></li>
+</ul>
+</head>
+ 
 
 </head>
  
@@ -9,44 +20,60 @@
 <h3>OPERACION DE VENTA</h3>
 </div>
 
-<div class="topnav">
-  <a href="{{url_for('api')}}">Inicio</a>
 
-  </div><br>
+  
 
-<div class="contenedor" id="container">
-  <header>
 
 <table align="center" cellpadding = "10">
-<!----- DNI ---------------------------------------------------------->
-<section class="main">
-  <div class="form">
-    
+<!----- obtencion del nombre del cliente para mostrar en pantalla------>
 
+<!----- DNI ---------------------------------------------------------->
+  </header>
+  
+  <section class="main">
+    <div class="form">
+      <h3><h2>Cliente :        {{nombre_cliente}}</h2></h3>
+      <h3><h2>Seleccione los productos que desea registrar en la operación : <h3></h3>
+      
+      
       <!-- Formulario para recibir los parámetros  -->
       <form method = "POST" action="{{url_for('operacion')}}">
+        
         <tr>
-        <td> canasto ropa</td>
-        <td><input type="text" name="canasto_ropa" placeholder=""  />
+        <td> Canasto ropa</td>
+        <td><input type="number" name="canasto_ropa"   placeholder="" min="1" max="{{total_stock_canasto_ropa}}"/> 
+          (max stock disponible:)  {{total_stock_canasto_ropa}} 
         <tr>
-        <td> canasto matero</td>
-        <td><input type="text" name="canasto_matero" placeholder=""  />
+        <td> Canasto matero</td>
+        <td><input type="number" name="canasto_matero" placeholder="" min="1" max="{{total_stock_canasto_matero}}"  />
+          (max stock disponible:)  {{total_stock_canasto_matero}} 
         <tr>
-        <td> bandejas exhibidoras</td>
-        <td><input type="text" name="bandejas_exhibidoras" placeholder=""/>
+        <td> Bandejas exhibidoras</td>
+        <td><input type="number" name="bandejas_exhibidoras" placeholder="" min="1" max="{{total_stock_bandejas_exhibidoras}}"/>
+          (max stock disponible:)  {{total_stock_bandejas_exhibidoras}} 
         <tr>
-        <td> bandejas pintadas</td>
-        <td><input type="text" name="bandejas_pintadas" placeholder="" />
+        <td> Bandejas pintadas</td>
+        <td><input type="number" name="bandejas_pintadas" placeholder="" min="1" max="{{total_stock_bandejas_pintadas}}" />
+          (max stock disponible:)  {{total_stock_bandejas_pintadas}} 
         <tr>
-        <td> anillos</td>
-        <td><input type="text" name="anillos" placeholder=""  />
+        <td> Anillos</td>
+        <td><input type="number" name="anillos" placeholder="" min="1" max="{{total_stock_anillos}}" />
+          (max stock disponible:)  {{total_stock_anillos}} 
         <tr>
-        <td> paneritas base de mimbre</td>
-        <td><input type="text" name="paneritas_mimbre" placeholder=""  />
+        <td> Paneritas base de mimbre</td>
+        <td><input type="number" name="paneritas_mimbre" placeholder="" min="1" max="{{total_stock_paneritas_mimbre}}"  />
+          (max stock disponible:)  {{total_stock_paneritas_mimbre}} 
         <tr>
-        <td> paneritas base de madera</td>
-        <td><input type="text" name="paneritas_madera" placeholder=""  />
-        <tr>     
-        <td><button type="submit" class="btn btn-primary btn-block btn-large">comprar</button>
+        <td> Paneritas base de madera</td>
+        <td><input type="number" name="paneritas_madera" placeholder="" min="1" max="{{total_stock_paneritas_madera}}" />
+          (max stock disponible:)  {{total_stock_paneritas_madera}} 
+        <tr>
+        
+
+                 
+        <td><h2><button type="submit" class="btn btn-primary btn-block btn-large">REGISTRAR VENTA</button<h2> 
+        <tr>   
       </form>
+    </div>
+  </section>
 

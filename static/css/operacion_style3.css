@@ -14,7 +14,7 @@ header {
     padding-bottom: 1%;
     padding-left: 1%;
     padding-right: 1%;
-    color: white;
+    color: rgb(253, 16, 16);
     border-radius: 5px;
     border-color: rgba(38, 18, 75, 0.616);
 
@@ -29,7 +29,7 @@ header h1 {
     float: center;
     text-align: center;
     font-size: 70px;
-    color: white;
+    color: rgb(235, 33, 33);
     /*overflow: auto;*/
     box-sizing: border-box;
 
@@ -48,9 +48,9 @@ header h1 {
     max-width: 600px;
 }
 
-.main h1 { color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:1px; text-align:center; }
-.main h2 { color: #fff; text-shadow: 0 0 8px rgba(0,0,0,0.3); letter-spacing:1px;; }
-.main h3 { color: #fff; text-shadow: 0 0 7px rgba(0,0,0,0.3); letter-spacing:1px;; }
+.main h1 { color: rgb(9, 255, 0); text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:1px; text-align:center; }
+.main h2 { color: rgb(43, 255, 0); text-shadow: 0 0 8px rgba(0,0,0,0.3); letter-spacing:1px;; }
+.main h3 { color: rgb(43, 255, 0); text-shadow: 0 0 7px rgba(0,0,0,0.3); letter-spacing:1px;; }
 
 input { 
 	width: 100%; 

@@ -1,0 +1,28 @@
+</header>
+<section class="main">
+  <div class="form">
+    <h1 style="text-align:center">Registro de Operaciones realizadas</h1>
+
+    <table border="1">
+      <thead cellpadding="1.0" cellspacing="1.0">
+          <tr>
+              <th>Id operacion</th>
+              <th>Fecha</th>            
+              <th>Id producto</th>
+              <th>Cantidad</th>
+              <th>Id Vendedor</th>
+              <th>Precio Final</th>
+          </tr>
+          {% for row in data %}
+          <tr>
+              <td>{{row['id']}}</td>
+              <td>{{row['fecha']}}</td>
+              <td>{{row['id_producto']}}</td>
+              <td>{{row['cantidad']}}</td>
+              <td>{{row['id_usuario']}}</td>
+              <td>{{row['precio_final']}}</td>
+              
+          </tr>
+          {% endfor %}
+      </thead>
+    </table>

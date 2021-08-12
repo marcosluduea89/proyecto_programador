@@ -1,7 +1,16 @@
 <html>
 <head>
 <title>Registro Cliente</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/operacion_style.css') }}">
+<ul>
+    
+  <li><a href="{{url_for('index')}}">Home</a></li>
+  <li><a href="{{url_for('registrocliente')}}">Base de Datos de Clientes</a></li>
+
+</ul>
+</head>
+ 
 
 </head>
  
@@ -9,13 +18,7 @@
 <h3>REGISTRO NUEVO CLIENTE</h3>
 </div>
 
-<div class="topnav">
-  <a href="{{url_for('api')}}">Inicio</a>
 
-  </div><br>
-
-<div class="contenedor" id="container">
-  <header>
 
 <table align="center" cellpadding = "10">
 <!----- DNI ---------------------------------------------------------->
@@ -27,7 +30,7 @@
       <form method = "POST" action="{{url_for('registrocliente')}}">
         <tr>
         <td> DNI</td>
-        <td><input type="text" name="dni" placeholder="" required="required" />
+        <td><input type="number" name="dni" placeholder="" required="required" />
         <tr>
         <td> NOMBRE</td>
         <td><input type="text" name="nombre" placeholder="" required="required" />
@@ -36,7 +39,7 @@
         <td><input type="text" name="apellido" placeholder="" required="required" />
         <tr>
         <td> TELEFONO</td>
-        <td><input type="text" name="telefono" placeholder="" required="required" />
+        <td><input type="number" name="telefono" placeholder="" required="required" />
         <tr>
         <td> DIRECCION</td>
         <td><input type="text" name="direccion" placeholder="">
