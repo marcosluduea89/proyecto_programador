@@ -150,6 +150,7 @@ def venta():
     if request.method == 'GET':
         # Si entré por "GET" es porque acabo de cargar la página
         try:
+            session['cliente'] =''
             return render_template('autentificacion.html')
             
         except:
@@ -236,7 +237,7 @@ def operacion():
                 #     #falta realizar html de usuario, por el momento pondremos '1' marcos
                     id_usuario = 1 # esto prodria solicitarlo como un post tambien   
                 #     #falta realizar la logica por ahora pondremos un numero x
-                    precio_final = 300
+                    precio_final =models.consultar_preciofinal(nombre,cantidad)
                     
                     models.insert_operacion (str(nombre),int(cantidad),int(id_usuario),int(precio_final))
             except:
@@ -256,7 +257,7 @@ def operacion():
                 if  total_stock > int(cantidad) :
                     models.actualizar_stock (nombre,cantidad)
                     id_usuario = 1
-                    precio_final = 300
+                    precio_final = models.consultar_preciofinal(nombre,cantidad)
                     models.insert_operacion (str(nombre),int(cantidad),int(id_usuario),int(precio_final))
             except:
                 pass
@@ -273,7 +274,7 @@ def operacion():
                 if  total_stock > int(cantidad) :
                     models.actualizar_stock (nombre,cantidad)
                     id_usuario = 1
-                    precio_final = 300
+                    precio_final = models.consultar_preciofinal(nombre,cantidad)
                     models.insert_operacion (str(nombre),int(cantidad),int(id_usuario),int(precio_final))
             except:
                 pass
@@ -290,7 +291,7 @@ def operacion():
                 if  total_stock > int(cantidad) :
                     models.actualizar_stock (nombre,cantidad)    
                     id_usuario = 1
-                    precio_final = 300
+                    precio_final = models.consultar_preciofinal(nombre,cantidad)
                     models.insert_operacion (str(nombre),int(cantidad),int(id_usuario),int(precio_final))
             except:
                 pass
@@ -307,7 +308,7 @@ def operacion():
                 if  total_stock > int(cantidad) :
                     models.actualizar_stock (nombre,cantidad)
                     id_usuario = 1
-                    precio_final = 300
+                    precio_final = models.consultar_preciofinal(nombre,cantidad)
                     models.insert_operacion (str(nombre),int(cantidad),int(id_usuario),int(precio_final))
             except:
                 pass
@@ -324,7 +325,7 @@ def operacion():
                 if  total_stock > int(cantidad) :
                     models.actualizar_stock (nombre,cantidad)
                     id_usuario = 1
-                    precio_final = 300
+                    precio_final = models.consultar_preciofinal(nombre,cantidad)
                     models.insert_operacion (str(nombre),int(cantidad),int(id_usuario),int(precio_final))
             except:
                 pass
@@ -341,7 +342,7 @@ def operacion():
                 if  total_stock > int(cantidad) :
                     models.actualizar_stock (nombre,cantidad)
                     id_usuario = 1
-                    precio_final = 300
+                    precio_final = models.consultar_preciofinal(nombre,cantidad)
                     models.insert_operacion (str(nombre),int(cantidad),int(id_usuario),int(precio_final))
             except:
                 pass
@@ -394,29 +395,46 @@ def registrousuario ():
         models.insert_cliente(nombre,apellido)
         return redirect(url_for('operacion'))
 
-# @app.route("/operaciones")
-# def operaciones():
-#     try:
-#         limit_str = str(request.args.get('limit'))
-#         offset_str = str(request.args.get('offset'))
+@app.route("/operaciones")
+def operaciones():
+    try:
 
-#         limit = 0
-#         offset = 0
+        limit_str = str(request.args.get('limit'))
+        offset_str = str(request.args.get('offset'))
 
-#         if(limit_str is not None) and (limit_str.isdigit()):
-#             limit = int(limit_str)
+        limit = 0
+        offset = 0
 
-#         if(offset_str is not None) and (offset_str.isdigit()):
-#             offset = int(offset_str)
+        if(limit_str is not None) and (limit_str.isdigit()):
+            limit = int(limit_str)
 
-#         # Obtener el reporte
-#         data = models.report(limit=limit, offset=offset)
+        if(offset_str is not None) and (offset_str.isdigit()):
+            offset = int(offset_str)
 
-#         return render_template('tabla_ultimas_operaciones.html', data=data)
-#     except:
-#         return jsonify({'trace': traceback.format_exc()})
+        # Obtener el reporte
+        data = models.report(limit=limit, offset=offset)
+
+        return render_template('tabla_ultimas_operaciones.html', data=data)
+    except:
+        return jsonify({'trace': traceback.format_exc()})
+
+@app.route("/infocliente")
+def infocliente():
+    try:
+
+        if 'cliente' in session:
+            nombre_cliente = session['cliente']
+
+        cliente_id = models.buscar_id_cliente(nombre_cliente)
 
 
+
+        # Obtener el reporte
+        data = models.report_cliente(int(cliente_id))
+
+        return render_template('tabla_info_cliente.html', data=data)
+    except:
+        return jsonify({'trace': traceback.format_exc()})
 
 
 if __name__ == '__main__':

@@ -10,26 +10,26 @@
 </head>
 <section class="main">
   <div class="form">
-    <h1 style="text-align:center">Registro de Operaciones realizadas</h1>
+    <h1 style="text-align:center">Registro de cliente</h1>
 
     <table border="1">
       <thead cellpadding="1.0" cellspacing="1.0">
           <tr>
-              <th>Id operacion</th>
-              <th>Fecha</th>            
-              <th>Id producto</th>
-              <th>Cantidad</th>
-              <th>Id Vendedor</th>
-              <th>Precio Final</th>
+              <th>DNI cliente</th>
+              <th>Nombre</th>            
+              <th>Apellido</th>
+              <th>Telefono</th>
+              <th>Direccion</th>
+              
           </tr>
           {% for row in data %}
           <tr>
-              <td>{{row['id']}}</td>
-              <td>{{row['fecha']}}</td>
-              <td>{{row['id_producto']}}</td>
-              <td>{{row['cantidad']}}</td>
-              <td>{{row['id_usuario']}}</td>
-              <td>{{row['precio_final']}}</td>
+              <td>{{row['dni']}}</td>
+              <td>{{row['nombre']}}</td>
+              <td>{{row['apellido']}}</td>
+              <td>{{row['telefono']}}</td>
+              <td>{{row['direccion']}}</td>
+              
               
           </tr>
           {% endfor %}

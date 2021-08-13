@@ -186,12 +186,29 @@ def consultar_stock (nombre):
 
     return total_stock
 
+def consultar_preciofinal (nombre, cantidad):
+    id_producto = buscar_id_producto(nombre)
+    id_producto = int(id_producto)
+
+    producto = db.session.query(Producto).filter(Producto.id==id_producto).first()
+    producto_precio = producto.precio
+    precio_final = int(producto_precio) * int(cantidad)
+
+    return precio_final
+
+
 def buscar_id_producto(nombre):
     query = db.session.query(Producto).filter(Producto.nombre_producto == nombre)
     producto = query.first()
     numeroid= producto.id
 
     return numeroid
+
+def buscar_id_cliente (nombre_cliente):
+    query = db.session.query(Cliente).filter(Cliente.nombre == nombre_cliente)
+    cliente = query.first()
+    id_cliente= cliente.dni
+    return id_cliente
 
 def busqueda():
     query = db.session.query(Producto)
@@ -202,33 +219,55 @@ def busqueda():
 
     return total_productos,ultimo_mes
 
-# def report(limit=0, offset=0):
+def report(limit=0, offset=0):
 
-#     json_result_list = []
-#     query = db.session.query(Operacion).with_entities(Operacion, db.func.count(Operacion.id))
+    json_result_list = []
+    query = db.session.query(Operacion).with_entities(Operacion, db.func.count(Operacion.id))
 
-#     # Agrupamos por paciente (name) para que solo devuelva
-#     # un valor por paciente
-#     query = query.group_by(Operacion.id)
+    # Agrupamos por paciente (name) para que solo devuelva
+    # un valor por paciente
+    query = query.group_by(Operacion.id)
 
-#     # Ordenamos por fecha para obtener el ultimo registro
-#     query = query.order_by(Operacion.fecha)
+    # Ordenamos por fecha para obtener el ultimo registro
+    query = query.order_by(Operacion.fecha)
 
-#     if limit > 0:
-#         query = query.limit(limit)
-#         if offset > 0:
-#             query = query.offset(offset)
+    if limit > 0:
+        query = query.limit(limit)
+        if offset > 0:
+            query = query.offset(offset)
 
-#     for result in query:
-#         operaciones = result[0]
+    for result in query:
+        operaciones = result[0]
         
-#         json_result = {}
-#         json_result['id'] = operaciones.id
-#         json_result['fecha'] = operaciones.fecha.strftime("%Y-%m-%d %H:%M:%S.%f")
-#         json_result['id_producto'] = operaciones.id_producto
-#         json_result['cantidad'] = operaciones.cantidad
-#         json_result['id_usuario'] = operaciones.id_usuario
-#         json_result['precio_final'] = operaciones.precio_final
-#         json_result_list.append(json_result)
+        json_result = {}
+        json_result['id'] = operaciones.id
+        json_result['fecha'] = operaciones.fecha.strftime("%Y-%m-%d %H:%M:%S.%f")
+        json_result['id_producto'] = operaciones.id_producto
+        json_result['cantidad'] = operaciones.cantidad
+        json_result['id_usuario'] = operaciones.id_usuario
+        json_result['precio_final'] = operaciones.precio_final
+        json_result_list.append(json_result)
 
-#     return json_result_list
+    return json_result_list
+
+def report_cliente(cliente_id ):
+
+
+    json_result_list = []
+    query = db.session.query(Cliente).filter(Cliente.dni==cliente_id)
+    cliente = query.first()
+
+ 
+
+        
+    json_result = {}
+    json_result['dni'] = cliente.dni
+    json_result['nombre'] = cliente.nombre
+    json_result['apellido'] = cliente.apellido
+    json_result['telefono'] = cliente.telefono
+    json_result['direccion'] = cliente.direccion
+    json_result_list.append(json_result)
+
+    return json_result_list
+
+

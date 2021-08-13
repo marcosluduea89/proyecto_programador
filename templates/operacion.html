@@ -7,9 +7,9 @@
 <ul>
     
   <li><a href="{{url_for('index')}}">Home</a></li>
-  <li><a href="#d4">Consultar Ultimas operaciones</a></li>
+  <li><a href="{{url_for('operaciones')}}">Consultar operaciones</a></li>
   <li><a href="{{url_for('venta')}}">Realizar operacion con otro cliente</a></li>
-  <li><a href="#d4">Informacion de Cliente</a></li>
+  <li><a href="{{url_for('infocliente')}}">Informacion de Cliente</a></li>
 </ul>
 </head>
  
@@ -33,7 +33,7 @@
   <section class="main">
     <div class="form">
       <h3><h2>Cliente :        {{nombre_cliente}}</h2></h3>
-      <h3><h2>Seleccione los productos que desea registrar en la operación : <h3></h3>
+      <h3><h2>Seleccione la cantidad de cada producto que desea registrar en la operación : <h3></h3>
       
       
       <!-- Formulario para recibir los parámetros  -->
