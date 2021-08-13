@@ -1,0 +1,37 @@
+</header>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/operacion_style.css') }}">
+<ul>
+    
+  <li><a href="{{url_for('index')}}">Home</a></li>
+  <li><a href="{{url_for('venta')}}">Atras</a></li>
+
+</ul>
+</head>
+<section class="main">
+  <div class="form">
+    <h1 style="text-align:center">Registro de clientes</h1>
+
+    <table border="1">
+      <thead cellpadding="1.0" cellspacing="1.0">
+          <tr>
+              <th>DNI cliente</th>
+              <th>Nombre</th>            
+              <th>Apellido</th>
+              <th>Telefono</th>
+              <th>Direccion</th>
+              
+          </tr>
+          {% for row in data %}
+          <tr>
+              <td>{{row['dni']}}</td>
+              <td>{{row['nombre']}}</td>
+              <td>{{row['apellido']}}</td>
+              <td>{{row['telefono']}}</td>
+              <td>{{row['direccion']}}</td>
+              
+              
+          </tr>
+          {% endfor %}
+      </thead>
+    </table>

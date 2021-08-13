@@ -270,4 +270,35 @@ def report_cliente(cliente_id ):
 
     return json_result_list
 
+def report_clientes (limit=0, offset=0):
+
+    json_result_list = []
+    query = db.session.query(Cliente).with_entities(Cliente, db.func.count(Cliente.dni))
+
+    # Agrupamos por paciente (name) para que solo devuelva
+    # un valor por paciente
+    query = query.group_by(Cliente.dni)
+
+    # Ordenamos por fecha para obtener el ultimo registro
+
+
+    if limit > 0:
+        query = query.limit(limit)
+        if offset > 0:
+            query = query.offset(offset)
+
+    for result in query:
+        cliente = result[0]
+        
+        json_result = {}
+        json_result['dni'] = cliente.dni
+        json_result['nombre'] = cliente.nombre
+        json_result['apellido'] = cliente.apellido
+        json_result['telefono'] = cliente.telefono
+        json_result['direccion'] = cliente.direccion
+        json_result_list.append(json_result)
+
+
+    return json_result_list
+
 

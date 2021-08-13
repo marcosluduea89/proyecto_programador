@@ -436,7 +436,32 @@ def infocliente():
     except:
         return jsonify({'trace': traceback.format_exc()})
 
+@app.route("/clientes")
+def clientes():
+    try:
 
+        limit_str = str(request.args.get('limit'))
+        offset_str = str(request.args.get('offset'))
+
+        limit = 0
+        offset = 0
+
+        if(limit_str is not None) and (limit_str.isdigit()):
+            limit = int(limit_str)
+
+        if(offset_str is not None) and (offset_str.isdigit()):
+            offset = int(offset_str)
+
+        # Obtener el reporte
+        data = models.report_clientes(limit=limit, offset=offset)
+
+        return render_template('tabla_clientes.html', data=data)
+    except:
+        return jsonify({'trace': traceback.format_exc()})    
+    
+
+
+    
 if __name__ == '__main__':
     print('*************************************')
     print('')
