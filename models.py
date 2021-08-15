@@ -12,7 +12,10 @@ __email__ = "marcosluduea89@gmail.com  "
 __version__ = "1.1"
 
 
+
+
 from datetime import datetime
+from flask import json
 from flask.json import jsonify
 import sqlalchemy
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
@@ -22,6 +25,7 @@ from sqlalchemy import func
 
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql.expression import join
 db = SQLAlchemy()
 
 class Cliente(db.Model):
@@ -31,7 +35,7 @@ class Cliente(db.Model):
     apellido = db.Column(db.String)
     telefono = db.Column(db.Integer)
     direccion = db.Column(db.String)
-    
+
     def __repr__(self):
         return f"Cliente {self.nombre} {self.apellido}, telefono{self.telefono} y direccion {self.direccion}"
 
@@ -40,7 +44,7 @@ class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String)
     apellido = db.Column(db.String)
-    
+
     def __repr__(self):
         return f"Usuario con id: {self.id},  {self.nombre},{self.apellido}"
 
@@ -52,7 +56,7 @@ class Operacion(db.Model):
     cantidad = db.Column(db.Integer)
     id_usuario = db.Column(db.Integer, ForeignKey("usuario.id"))
     precio_final = db.Column(db.Integer)
-    
+
     producto = relationship("Producto")
     usuario = relationship("Usuario")
 
@@ -66,9 +70,9 @@ class Producto(db.Model):
     nombre_producto = db.Column(db.String)
     dimension = db.Column(db.String)
     precio = db.Column(db.Integer)
-    
- 
-    
+
+
+
     def __repr__(self):
         return f" Producto nuevo: {self.nombre_producto}, id_producto: {self.id}"
 
@@ -78,9 +82,9 @@ class Stock(db.Model):
     id_producto = db.Column(db.Integer, ForeignKey("producto.id"))
     cantidad = db.Column(db.Integer)
     proveedor = db.Column(db.String)
-    
+
     producto = relationship("Producto")
-    
+
     def __repr__(self):
         return f"{self.id_producto}, ingreso {self.cantidad}"
 
@@ -137,11 +141,11 @@ def insert_productos():
     productos = [('canasto_ropa' ,'20x30',100),('canasto_matero' ,'25x30',150),
                 ('bandejas_exhibidoras' ,'25x30',150),('bandejas_pintadas' ,'25x35',200),
                 ('anillos' ,'25',40),('paneritas_mimbre' ,'25x35',250),('paneritas_madera','25x35',300)]
-    
+
     for row in productos:
         nombre_producto,dimension,precio = row
         insertar (nombre_producto,dimension,int(precio))
-        
+
 def insert_stock():
     def insertar (id_producto,cantidad, proveedor):# Crear un nuevo registro de stock
         stock = Stock(id_producto=id_producto, cantidad= cantidad,proveedor=proveedor)
@@ -155,7 +159,7 @@ def insert_stock():
                         (3 ,10,'Mimbres Mendocinos'),(4 ,6,'Mimbre de Buenos Aires'),
                         (5 ,10,'Mimbres Mendocinos'),(6 ,250,'Mimbres de Buenos Aires'),(7,13,'Mimbres Mendocinos')]
 
-    
+
     for row in stock_productos:
         id_producto, cantidad, proveedor = row
         insertar (int(id_producto),int(cantidad),proveedor)
@@ -165,7 +169,7 @@ def actualizar_stock (nombre,cantidad):
     id_producto= buscar_id_producto(nombre)
     id_producto= int(id_producto)
     cantidad = int(cantidad)
-    
+
     exist_product = db.session.query(Stock).filter(Stock.id_producto==id_producto).first()
     exist_product.id = id_producto
 
@@ -215,7 +219,7 @@ def busqueda():
     todos = query.all()
     total_productos = [x.cantidad for x in todos]
     ultimo_mes = [x.fecha for x in todos]
-    
+
 
     return total_productos,ultimo_mes
 
@@ -238,7 +242,7 @@ def report(limit=0, offset=0):
 
     for result in query:
         operaciones = result[0]
-        
+
         json_result = {}
         json_result['id'] = operaciones.id
         json_result['fecha'] = operaciones.fecha.strftime("%Y-%m-%d %H:%M:%S.%f")
@@ -257,9 +261,9 @@ def report_cliente(cliente_id ):
     query = db.session.query(Cliente).filter(Cliente.dni==cliente_id)
     cliente = query.first()
 
- 
 
-        
+
+
     json_result = {}
     json_result['dni'] = cliente.dni
     json_result['nombre'] = cliente.nombre
@@ -289,7 +293,7 @@ def report_clientes (limit=0, offset=0):
 
     for result in query:
         cliente = result[0]
-        
+
         json_result = {}
         json_result['dni'] = cliente.dni
         json_result['nombre'] = cliente.nombre
@@ -301,4 +305,30 @@ def report_clientes (limit=0, offset=0):
 
     return json_result_list
 
+
+def reporte_stock(limit=0, offset=0):
+
+    json_result_list = []
+    query = db.session.query(Stock,Producto).with_entities(Stock,Producto, db.func.count(Stock.id,Producto.nombre_producto))
+    # query = db.session.query(Stock,Producto).with_entities(Stock,Producto, db.func.count(Stock.id,Producto.nombre_producto))
+
+    if limit > 0:
+        query = query.limit(limit)
+        if offset > 0:
+            query = query.offset(offset)
+
+    query = query.group_by(Stock.id,Producto.nombre_producto)
+  
+    for result in query:
+        stock = result[0]
+        json_result = {}
+        json_result['id'] = stock.id
+        json_result['id_producto'] = stock.id_producto
+        json_result['cantidad'] = stock.cantidad
+        json_result['proveedor'] = stock.proveedor
+        json_result['nombre_producto'] = stock.nombre_producto
+        
+        json_result_list.append(json_result)
+            
+    return json_result_list
 

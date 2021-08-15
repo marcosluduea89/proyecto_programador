@@ -103,28 +103,6 @@ def index():
 
 
 
-@app.route("/api")
-def api():
-    try:
-        # Imprimir los distintos endopoints disponibles
-        #inicio y creacion de base de datos
-        result = "<h2>[GET] /reset --> borrar y crear la base de datos</h2>"
-        #logueo y logout
-        result += "<h2>[GET] /login --> HTML con el formulario de ingreso de usuario</h2>"
-        result += "<h2>[POST] /login --> ingresar el nombre de usuario por JSON</h2>"
-        result += "<h2>[GET] /usuario --> Pagina de bienvenida del usuario</h2>"
-        result += "<h2>[GET] /logout --> Terminar la sesion</h2>"
-        #endpoints de funcionalidades de la app
-        result += "<h2>elegir operacion/</h2>"
-        result += "<h2>elegir operacion/1 _Venta:</h2>"
-        result += "<h2>elegir operacion/2 _Consulta:</h2>"
-
-        return(result)
-    except:
-        return jsonify({'trace': traceback.format_exc()})
-
-
-
 @app.route("/reset")
 def reset():
     try:
@@ -176,22 +154,6 @@ def venta():
             return jsonify({'trace': traceback.format_exc()})
 
 
-@app.route("/comparativa")
-def comparativa(): 
-    total_productos,ultimo_mes = models.busqueda()
-
-    
-    fig, ax = plt.subplots(figsize=(16, 9))
-    ax.plot(ultimo_mes, total_productos)
-    ax.set_ylabel("Total de ventas registradas")
-    ax.set_xlabel("Mes")
-
-        
-    output = io.BytesIO()
-    FigureCanvas(fig).print_png(output)
-    plt.close(fig)  # Cerramos la imagen para que no consuma memoria del sistema
-    return Response(output.getvalue(), mimetype='image/png')      
-        
 @app.route("/operacion",methods=['GET', 'POST','PUT'])
 def operacion():
     if request.method == 'GET':
@@ -458,10 +420,46 @@ def clientes():
         return render_template('tabla_clientes.html', data=data)
     except:
         return jsonify({'trace': traceback.format_exc()})    
-    
+
+@app.route ("/stock", methods= ['GET', 'PUT']  )
+def stock ():
+    if request.method == 'GET':
+
+        try:
+            limit_str = str(request.args.get('limit'))
+            offset_str = str(request.args.get('offset'))
+
+            limit = 0
+            offset = 0
+
+            if(limit_str is not None) and (limit_str.isdigit()):
+                limit = int(limit_str)
+
+            if(offset_str is not None) and (offset_str.isdigit()):
+                offset = int(offset_str)
+
+        # Obtener el reporte
+            data = models.reporte_stock(limit=limit, offset=offset)
+            
+         
+            return render_template('tabla_stock.html', data=data)
+
+            
+
+        except:
+            return jsonify({'trace': traceback.format_exc()})
+
+  
+    if request.method == 'POST':
+
+        # cantidad_canasto_ropa = (request.form.get ('cantidad_canasto_ropa'))
 
 
-    
+        pass
+
+
+
+
 if __name__ == '__main__':
     print('*************************************')
     print('')

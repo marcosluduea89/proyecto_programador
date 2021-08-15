@@ -1,0 +1,49 @@
+</header>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/operacion_style.css') }}">
+<ul>
+    
+  <li><a href="{{url_for('index')}}">Home</a></li>
+  <li><a href="{{url_for('venta')}}">Atras</a></li>
+
+</ul>
+</head>
+<section class="main">
+  <div class="form">
+    <h1 style="text-align:center">Stock</h1>
+
+    <table border="1">
+      <thead cellpadding="1.0" cellspacing="1.0">
+          <tr>
+              <th>ID Stock</th>
+              <th>Id Producto</th>          
+              <th>Cantidad</th>
+              <th>Proveedor</th>
+              <th>Agregar Stock</th>
+              <th>Nombre de Producto</th>
+              
+          </tr>
+          {% for row in data %}
+          <tr>
+            <form method = "POST" action="{{url_for('stock')}}">    
+              <td>{{row['id']}}</td>
+              <td>{{row['id_producto']}}</td>
+              <td>{{row['cantidad']}}</td>
+              <td>{{row['proveedor']}}</td>
+              <td><input type="number" name="cantidad" placeholder=""td>
+              <td>{{row['nombre_producto']}}</td>
+            </form>  
+                
+              
+          {% endfor %}    
+
+                  
+          </tr>
+
+              
+
+                  
+
+        </tr>
+      </thead>
+    </table>

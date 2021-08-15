@@ -41,25 +41,5 @@ def buscador_cliente(dni):
         return nombre
 
     
-    
-def agregar_cliente ():
-
-    
-    pass
-def operacion_venta():
-
-    # operacion.insert_operacion()
-    # pass
-
-    # def consulta_stock():
-    #     pass
-    # def venta():
-    #     pass
-    # def actualizar_stock():
-        pass
-def total():
-    pass
-
-
 
 
