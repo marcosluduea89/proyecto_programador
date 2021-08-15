@@ -5,8 +5,9 @@
 
 Hola Bienvenidos a mi programa! 
 
-El mismo es un registro operaciones de ventas de productos de mimbre de un emprendimiento, cuyo nombre es Fenix . 
-Funcionamiento: 
+El mismo es un registro operaciones de ventas de productos de mimbre de un emprendimiento, cuyo nombre es Fenix.
+
+Funcionamiento:
 
 Se utilizó flask como webserver. Se tienen 4 archivos. py ( app.py, config.py, models.py,venta.py.) 
 El archivo principal es app.py, de el se inicia el programa a la dirección del localhost, en él incluyen todos los endpoints.
