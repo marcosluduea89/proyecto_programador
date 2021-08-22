@@ -24,7 +24,7 @@ __version__ = "1.0"
 
 
 
-from re import template
+
 import traceback
 import io
 import sys
@@ -46,11 +46,13 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.image as mpimg
 
-from models import Cliente,Usuario,Operacion,Producto,Stock
-import models
+from models import db
+from models import *
+import models 
 from venta import verificacion_cliente
 from venta import buscador_cliente
-from models import actualizar_stock, busqueda, db, insert_cliente
+
+from models import actualizar_stock, insert_cliente, insert_productos,insert_stock,insert_usuario
 
 
 from config import config
@@ -80,45 +82,39 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_config['database']}"
 
 models.db.init_app(app)
 
-### VARIABLES GLOBALES##Estas son las variables que quedarán almacenadas para obtenerlas cuando exista una autentificacion
-#y se irán remplazando a medida que cambiemos de usuario
-
 
 
 # Ruta que se ingresa por la ULR 127.0.0.1:5000
 @app.route("/")
 def index():
     try:
-        
-        if os.path.isfile(db_config['database']) == False:
-            # Sino existe la base de datos la creo
-            
-            models.create_schema()
-
-        # En el futuro se podria realizar una página de bienvenida
+        # renderizamos la pagina principal
         return render_template('home.html')
+ 
                 
     except:
         return jsonify({'trace': traceback.format_exc()})
-
 
 
 @app.route("/reset")
 def reset():
     try:
         # Borrar y crear la base de datos e insertar productos
-        if os.path.isfile(db_config['database']) == True:
+
         
-            models.create_schema()
-            models.insert_productos()
-            models.insert_usuario(nombre='Marcos',apellido='ludueña')
-            models.insert_stock()
+        models.create_schema()
+        models.insert_productos()
+        models.insert_usuario(nombre='Marcos',apellido='ludueña')
+        models.insert_stock()
+            
+        
+        return ("<h3>Base de datos re-generada!</h3>")
             
 
-        result = "<h3>Base de datos re-generada!</h3>"
-        return (result)
     except:
+        
         return jsonify({'trace': traceback.format_exc()})
+        
 
 
 @app.route("/venta", methods= ['GET','POST'] )

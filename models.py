@@ -14,18 +14,18 @@ __version__ = "1.1"
 
 
 
-from datetime import datetime
-from flask import json
-from flask.json import jsonify
 import sqlalchemy
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import query, sessionmaker, relationship
+from datetime import datetime
+from flask import json
+from flask.json import jsonify
 from sqlalchemy import func
 
 
+
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql.expression import join
 db = SQLAlchemy()
 
 class Cliente(db.Model):
@@ -95,6 +95,7 @@ def create_schema():
 
     # Crear las tablas
     db.create_all()
+    
 
 def insert_cliente(dni, nombre, apellido,telefono,direccion):
     # Crear un nuevo registro de clientes
@@ -103,6 +104,7 @@ def insert_cliente(dni, nombre, apellido,telefono,direccion):
     # Agregar el registro de clientes a la DB
     db.session.add(cliente)
     db.session.commit()
+    
 
 def insert_usuario(nombre, apellido):
     # Crear un nuevo registro de usuario
@@ -111,6 +113,7 @@ def insert_usuario(nombre, apellido):
     # Agregar el registro de usuario a la DB
     db.session.add(usuario)
     db.session.commit()
+    print(usuario)
 
 def insert_operacion(nombre, cantidad,id_usuario,precio_final):
     # Crear un nuevo registro de operacion
@@ -131,12 +134,13 @@ def insert_operacion(nombre, cantidad,id_usuario,precio_final):
 
 def insert_productos():
     def insertar (nombre_producto,dimension,precio):
-    # Crear un nuevo producto
+    #Crear un nuevo producto
         producto_nuevo = Producto(nombre_producto=nombre_producto,dimension=dimension,precio=precio)
 
-        # Agregar el producto a la DB
+        #Agregar el producto a la DB
         db.session.add(producto_nuevo)
         db.session.commit()
+        print(producto_nuevo)
 
     productos = [('canasto_ropa' ,'20x30',100),('canasto_matero' ,'25x30',150),
                 ('bandejas_exhibidoras' ,'25x30',150),('bandejas_pintadas' ,'25x35',200),
@@ -151,7 +155,7 @@ def insert_stock():
         stock = Stock(id_producto=id_producto, cantidad= cantidad,proveedor=proveedor)
         stock.id_producto = id_producto
 
-        # Agregar el registro de stock a la DB
+        #Agregar el registro de stock a la DB
         db.session.add(stock)
         db.session.commit()
         #Los id de productos van desde el 1 al 7
@@ -214,14 +218,14 @@ def buscar_id_cliente (nombre_cliente):
     id_cliente= cliente.dni
     return id_cliente
 
-def busqueda():
-    query = db.session.query(Producto)
-    todos = query.all()
-    total_productos = [x.cantidad for x in todos]
-    ultimo_mes = [x.fecha for x in todos]
+# def busqueda():
+#     query = db.session.query(Producto)
+#     todos = query.all()
+#     total_productos = [x.cantidad for x in todos]
+#     ultimo_mes = [x.fecha for x in todos]
 
 
-    return total_productos,ultimo_mes
+#     return total_productos,ultimo_mes
 
 def report(limit=0, offset=0):
 
@@ -309,7 +313,7 @@ def report_clientes (limit=0, offset=0):
 def reporte_stock(limit=0, offset=0):
 
     json_result_list = []
-    query = db.session.query(Stock,Producto).with_entities(Stock,Producto, db.func.count(Stock.id,Producto.nombre_producto))
+    query = db.session.query(Stock).with_entities(Stock, db.func.count(Stock.id))
     # query = db.session.query(Stock,Producto).with_entities(Stock,Producto, db.func.count(Stock.id,Producto.nombre_producto))
 
     if limit > 0:
@@ -317,7 +321,7 @@ def reporte_stock(limit=0, offset=0):
         if offset > 0:
             query = query.offset(offset)
 
-    query = query.group_by(Stock.id,Producto.nombre_producto)
+    query = query.group_by(Stock.id)
   
     for result in query:
         stock = result[0]
@@ -326,7 +330,7 @@ def reporte_stock(limit=0, offset=0):
         json_result['id_producto'] = stock.id_producto
         json_result['cantidad'] = stock.cantidad
         json_result['proveedor'] = stock.proveedor
-        json_result['nombre_producto'] = stock.nombre_producto
+        
         
         json_result_list.append(json_result)
             
